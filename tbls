@@ -1,0 +1,133 @@
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    -- Identity
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    phone VARCHAR(20) UNIQUE,
+
+    -- Authentication
+    password_hash TEXT,
+    auth_provider VARCHAR(50), -- google, apple, etc.
+    provider_id VARCHAR(255),
+
+    -- Profile Info
+    display_name VARCHAR(100),
+    bio TEXT,
+    avatar_url TEXT,
+    banner_url TEXT,
+    website VARCHAR(255),
+    location VARCHAR(100),
+
+    -- Account Status
+    is_verified BOOLEAN DEFAULT FALSE,
+    is_private BOOLEAN DEFAULT FALSE,
+    is_suspended BOOLEAN DEFAULT FALSE,
+
+    -- Metrics (denormalized for speed)
+    followers_count INT DEFAULT 0,
+    following_count INT DEFAULT 0,
+    posts_count INT DEFAULT 0,
+
+    -- Timestamps
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    last_login TIMESTAMP
+);
+
+
+CREATE TABLE posts (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    user_id BIGINT NOT NULL,
+
+    -- Content
+    text TEXT,
+    
+    -- Type system
+    post_type ENUM('post', 'repost', 'quote') DEFAULT 'post',
+
+    -- Repost / Quote reference
+    original_post_id BIGINT,
+
+    -- Reply system
+    parent_post_id BIGINT,
+
+    -- Visibility
+    is_deleted BOOLEAN DEFAULT FALSE,
+
+    -- Metrics (denormalized)
+    likes_count INT DEFAULT 0,
+    reposts_count INT DEFAULT 0,
+    replies_count INT DEFAULT 0,
+    views_count BIGINT DEFAULT 0,
+
+    -- Timestamps
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (original_post_id) REFERENCES posts(id),
+    FOREIGN KEY (parent_post_id) REFERENCES posts(id)
+);
+
+
+CREATE TABLE post_media (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+    post_id BIGINT NOT NULL,
+
+    media_type ENUM('image', 'video', 'gif'),
+
+    media_url TEXT NOT NULL,
+    thumbnail_url TEXT,
+
+    width INT,
+    height INT,
+    duration FLOAT, -- for video
+
+    -- Order of media in post (like X supports multiple images)
+    position INT DEFAULT 0,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (post_id) REFERENCES posts(id)
+);
+
+CREATE TABLE follows (
+    follower_id BIGINT NOT NULL,
+    following_id BIGINT NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (follower_id, following_id),
+
+    FOREIGN KEY (follower_id) REFERENCES users(id),
+    FOREIGN KEY (following_id) REFERENCES users(id)
+);
+
+CREATE TABLE likes (
+    user_id BIGINT NOT NULL,
+    post_id BIGINT NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (user_id, post_id),
+
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (post_id) REFERENCES posts(id)
+);
+
+CREATE TABLE bookmarks (
+    user_id BIGINT NOT NULL,
+    post_id BIGINT NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (user_id, post_id),
+
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (post_id) REFERENCES posts(id)
+);
+
+
