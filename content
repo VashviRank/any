@@ -1,0 +1,62 @@
+auth
+	registerUser()
+	loginUser()
+	logoutUser()
+	sendEmailVerification()
+	verifyEmail()
+	resendVerification()
+	forgotPassword()
+	resetPassword()	
+
+user
+	getUserById()
+	isUsernameAvailable()
+	isEmailAvailable()
+	changePassword()
+	create user()
+	get user profile
+	edit user profile(profile picture, cover picture, name, bio, location, website, birthdate)	
+	deleteAccount()
+	get joining data by user-id(date joined, how many times username changed, last username change date)
+	getOtherUserById()
+	search user
+	
+
+follow
+	get suggested users(username, fullname, bio, propfile picture, id(follow button), who follows from my follwings)
+	get all user followers by user-id (username, fullname, bio, propfile picture, id(follow button))
+	get all user followings by user-id (username, fullname, bio, propfile picture, id(follow button))
+	get most followed users as top creators
+	get user highlights
+
+post
+	get user posts by user-id
+	get user media by id
+	get posts of followers by reverse chronological order with reply repost or quotes
+	get recent posts orederd by chronological order with reply repost or quotes
+	create post(user-id, medias, text, polls(array), type[draft, post, repost, quote], isschedule, schedule date time, who can reply)
+	get post by post id
+	get post by post id with all replies
+	get repost of post by post-id
+	get quotes of post by post-id
+	edit post()
+	get user articles(only text posts) by user-id
+
+replies
+	get user replies by id
+	create reply(user_id, parent_post_id, medias, text, polls(array), type[draft, post, repost, quote], isschedule, schedule date time)
+
+feed
+
+save
+	get all save post of user
+	store saved  post by postid and userid
+	remove saved postid userid
+
+like
+	get user likes(liked posts) by user-id
+	store liked post by postid and userid
+	store liked reply by userid and replyid
+	remove like postid userid
+	remove like replyid userid
+	
