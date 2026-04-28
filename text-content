@@ -1,0 +1,44 @@
+📧 1. Email / OTP verification screen
+
+(what you already have)
+
+🧾 Typical UI content:
+Title: “Verify your email”
+Subtitle: “Enter the code we sent to your email”
+Input: 6-digit OTP
+CTA: Next / Verify
+Link: “Didn’t receive email?”
+
+👉 This step confirms identity (as also described in X signup docs)
+
+⚙️ 2. NEXT screen after OTP → “Customize your experience”
+
+This is the first screen after verification (very important for your implementation)
+
+🧾 UI content:
+Title: “Customize your experience”
+Text (key line):
+“Track where you see X content across the web”
+Checkbox (on/off toggle)
+Button: Next
+
+👉 This is confirmed in official flow: after signup + verification → customization step appears
+
+🪪 3. Name / profile step (comes right after)
+🧾 UI content:
+Title: “What should we call you?”
+Input: Name
+Button: Next
+
+🔐 4. Password screen (if not set earlier)
+🧾 UI content:
+Title: “You’ll need a password”
+Input: Password
+Hint: “Make sure it’s strong”
+Button: Next
+
+🎯 5. Interests selection
+🧾 UI content:
+Title: “What are you interested in?”
+Grid of topics
+Button: Next
